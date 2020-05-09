@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:id="@+id/card_superhero"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="16dp"
+    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+    android:orientation="vertical"
+    app:cardCornerRadius="12dp"
+    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+    android:layout_height="wrap_content" >
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:orientation="vertical"
+      android:layout_height="wrap_content">
+      <ImageView
+          android:layout_width="match_parent"
+          android:layout_height="300dp"
+          android:scaleType="centerCrop"
+          android:id="@+id/image_superhero"/>
+      <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:id="@+id/superhero_name"
+          android:text="@string/name"
+          android:layout_margin="16dp"
+          android:fontFamily="@font/poppins"
+          android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+      <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:id="@+id/superhero_occupation"
+          android:text="@string/beside_superhero"
+          android:layout_marginStart="16dp"
+          android:layout_marginEnd="16dp"
+          android:ellipsize="end"
+          android:maxLines="3"
+          android:fontFamily="@font/poppins"
+          android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+  </LinearLayout>
+
+</androidx.cardview.widget.CardView>

@@ -25,10 +25,10 @@ public class MainPresenter extends MviBasePresenter<MainView, MainViewState> {
                 .switchMap(index -> dataSource.getListOfSuperheroes(index)
                         .map(superHeroName -> (PartialMainState) new PartialMainState.getListOfSuperheroes(superHeroName))
                         .startWith(new PartialMainState.Loading())
-                        .onErrorReturn(error -> new PartialMainState.Error(error))
+                        .onErrorReturn(PartialMainState.Error::new)
                         .subscribeOn(Schedulers.io()));
 
-        MainViewState initState = new MainViewState(false,
+        MainViewState initState = new MainViewState(true,
                 false,
                null,
                 null);
@@ -36,6 +36,8 @@ public class MainPresenter extends MviBasePresenter<MainView, MainViewState> {
 
         subscribeViewState(initIntent.scan(initState, this::viewStateReducer), MainView::render);
     }
+
+//define viewStateReducer method
 
     MainViewState viewStateReducer(MainViewState oldState, PartialMainState changedState) {
         MainViewState newState = oldState;
@@ -53,8 +55,6 @@ public class MainPresenter extends MviBasePresenter<MainView, MainViewState> {
             newState.isLoading = false;
             newState.isSuperheroCardShown = false;
             newState.error = ((PartialMainState.Error) changedState).error;
-
-
         }
         return newState;
     }

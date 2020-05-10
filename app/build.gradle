@@ -36,11 +36,13 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'com.google.android.material:material:1.1.0'
-
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.9'
-    implementation 'com.jakewharton.rxbinding2:rxbinding:2.2.0'
-    implementation 'com.hannesdorfmann.mosby3:mvi:3.1.1'
-    implementation "com.squareup.picasso:picasso:2.71828"
-
+    def rxjava2_version = "2.2.9"
+    def rxbinding2_version = "2.2.0"
+    def mosby_version = "3.1.1"
+    def picasso_version = "2.71828"
+    implementation "io.reactivex.rxjava2:rxjava:$rxjava2_version"
+    implementation "com.jakewharton.rxbinding2:rxbinding:$rxbinding2_version"
+    implementation "com.hannesdorfmann.mosby3:mvi:$mosby_version"
+    implementation "com.squareup.picasso:picasso:$picasso_version"
 
 }

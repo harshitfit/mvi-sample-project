@@ -29,7 +29,7 @@ import io.reactivex.Observable;
 
 public class MainActivity extends MviActivity<MainView, MainPresenter> implements MainView {
 
-    private static final int IMAGE = 1;
+    private static final int MIN = 1;
     private static final String TAG = MainActivity.class.getSimpleName();
     CardView card;
     ImageView superHeroImage;
@@ -49,17 +49,7 @@ public class MainActivity extends MviActivity<MainView, MainPresenter> implement
         superOccupation = findViewById(R.id.superhero_occupation);
         button = findViewById(R.id.button);
         progressBar = findViewById(R.id.progress_bar);
-        ListOfHeroes = createListOfHeroes();
-    }
-
-    private List<SuperHero> createListOfHeroes() {
-        List<SuperHero> superHeroList = new ArrayList<>();
-        superHeroList.add(new SuperHero("Iron Man", "https://www.superherodb.com/pictures2/portraits/10/100/85.jpg", "Inventor, Industrialist; former United States Secretary of Defense"));
-        superHeroList.add(new SuperHero("Wolverine", "https://www.superherodb.com/pictures2/portraits/10/100/161.jpg", "Adventurer, instructor, former bartender, bouncer, spy, government operative, mercenary, soldier"));
-        superHeroList.add(new SuperHero("Spider-Man", "https://www.superherodb.com/pictures2/portraits/10/100/133.jpg", "Freelance photographer, teacher"));
-        superHeroList.add(new SuperHero("Thor", "https://www.superherodb.com/pictures2/portraits/10/100/140.jpg", "King of Asgard, formerly EMS Technician, Physician"));
-        superHeroList.add(new SuperHero("Captain America", "https://www.superherodb.com/pictures2/portraits/10/100/274.jpg", "Adventurer, federal official, intelligence operative; former soldier, Hydra agent, police officer, teacher, sparring partner"));
-        return superHeroList;
+        ListOfHeroes = getSampleListOfHeroes();
     }
 
     @NonNull
@@ -70,7 +60,7 @@ public class MainActivity extends MviActivity<MainView, MainPresenter> implement
 
     @Override
     public Observable<Integer> getSuperheroIntent() {
-        return RxView.clicks(button).map(click -> 4);
+        return RxView.clicks(button).map(click -> getRandomNumberInRange(MIN, ListOfHeroes.size() - 1));
     }
 
     private Integer getRandomNumberInRange(int min, int max) {
@@ -85,32 +75,43 @@ public class MainActivity extends MviActivity<MainView, MainPresenter> implement
         if (viewState.isLoading) {
             progressBar.setVisibility(View.VISIBLE);
             card.setVisibility(View.GONE);
-            button.setEnabled(false);
+            button.setVisibility(View.VISIBLE);
         } else if (viewState.error != null) {
             progressBar.setVisibility(View.GONE);
             card.setVisibility(View.GONE);
-            button.setEnabled(true);
+            button.setVisibility(View.VISIBLE);
             Toast.makeText(this, viewState.error.getMessage(), Toast.LENGTH_SHORT).show();
         } else if (viewState.isSuperheroCardShown) {
-            progressBar.setVisibility(View.GONE);
-            card.setVisibility(View.VISIBLE);
+            button.setVisibility(View.VISIBLE);
             button.setEnabled(true);
             Picasso.get().load(viewState.SuperHero.getImage()).fetch(new Callback() {
                 @Override
                 public void onSuccess() {
                     Picasso.get().load(viewState.SuperHero.getImage()).into(superHeroImage);
-                    superHeroName.setText(getString(R.string.name) + viewState.SuperHero.getName());
-                    superOccupation.setText(getString(R.string.beside_superhero) + viewState.SuperHero.getDescription());
 
+                    superHeroName.setText(String.format("%s %s", getString(R.string.name), viewState.SuperHero.getName()));
+                    superOccupation.setText(String.format("%s %s", getString(R.string.beside_superhero), viewState.SuperHero.getDescription()));
+                    progressBar.setVisibility(View.GONE);
+                    card.setVisibility(View.VISIBLE);
                 }
+
                 @Override
                 public void onError(Exception e) {
                     Log.d(TAG, e.getMessage());
+                    progressBar.setVisibility(View.GONE);
                 }
             });
-
-
         }
 
+    }
+
+    private List<SuperHero> getSampleListOfHeroes() {
+        List<SuperHero> superHeroList = new ArrayList<>();
+        superHeroList.add(new SuperHero("Iron Man", "https://www.superherodb.com/pictures2/portraits/10/100/85.jpg", "Inventor, Industrialist; former United States Secretary of Defense"));
+        superHeroList.add(new SuperHero("Wolverine", "https://www.superherodb.com/pictures2/portraits/10/100/161.jpg", "Adventurer, instructor, former bartender, bouncer, spy, government operative, mercenary, soldier"));
+        superHeroList.add(new SuperHero("Spider-Man", "https://www.superherodb.com/pictures2/portraits/10/100/133.jpg", "Freelance photographer, teacher"));
+        superHeroList.add(new SuperHero("Thor", "https://www.superherodb.com/pictures2/portraits/10/100/140.jpg", "King of Asgard, formerly EMS Technician, Physician"));
+        superHeroList.add(new SuperHero("Captain America", "https://www.superherodb.com/pictures2/portraits/10/100/274.jpg", "Adventurer, federal official, intelligence operative; former soldier, Hydra agent, police officer, teacher, sparring partner"));
+        return superHeroList;
     }
 }
